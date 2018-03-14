@@ -74,4 +74,19 @@ class MockTest
     {
         $this->tracker->setReturnValue('getId', 123);
     }
+
+    public function testReturnAt()
+    {
+        doStuff();
+
+        $dar->setReturnValueAt(0, 'getRow', [1, 2, 3]);
+        $dar->setReturnValueAt(1, 'getRow', [4, 5, 6]);
+
+        doOtherStuff();
+
+        $dar->setReturnValueAt(2, 'getRow', [7, 8, 9]);
+        $dar->setReturnValueAt(3, 'getRow', [10, 11, 12]);
+
+        doMoreStuff();
+    }
 }

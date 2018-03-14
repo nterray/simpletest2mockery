@@ -72,4 +72,15 @@ class MockTest
     {
         $this->tracker->allows(['getId' => 123]);
     }
+
+    public function testReturnAt()
+    {
+        doStuff();
+
+        doOtherStuff();
+
+        $dar->shouldReceive('getRow')->andReturns([1, 2, 3], [4, 5, 6], [7, 8, 9], [10, 11, 12]);
+
+        doMoreStuff();
+    }
 }

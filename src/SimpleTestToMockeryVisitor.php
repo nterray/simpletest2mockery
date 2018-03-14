@@ -338,6 +338,8 @@ class SimpleTestToMockeryVisitor extends NodeVisitorAbstract
         $new_node = $this->convertNode($node->expr);
         if (is_array($new_node)) {
             return $this->convertNodesToExpressions($node, $new_node);
+        } elseif ($new_node === NodeTraverser::REMOVE_NODE) {
+            return $new_node;
         } elseif ($new_node instanceof Node\Expr) {
             return new Node\Stmt\Expression($new_node, $node->getAttributes());
         } elseif ($new_node !== null) {
@@ -377,6 +379,9 @@ class SimpleTestToMockeryVisitor extends NodeVisitorAbstract
 
                 case 'setReturnValueAt':
                 case 'setReturnReferenceAt':
+                    return $this->convertReturnAt($node);
+                    break;
+
                 case 'expectAt':
                 case 'expect':
                 case 'expectAtLeastOnce':
@@ -440,6 +445,19 @@ class SimpleTestToMockeryVisitor extends NodeVisitorAbstract
             );
         }
         throw new \Exception("Un-managed number of arguments for setReturnValue at L".$node->getLine());
+    }
+
+    /**
+     * @param Node\Expr\MethodCall $node
+     * @return Node\Expr\MethodCall
+     * @throws \Exception
+     */
+    private function convertReturnAt(Node\Expr\MethodCall $node)
+    {
+        if (count($node->args) <= 3) {
+            return NodeTraverser::REMOVE_NODE;
+        }
+        throw new \Exception("Un-managed number of arguments for setReturnValueAt at L".$node->getLine());
     }
 
     /**
